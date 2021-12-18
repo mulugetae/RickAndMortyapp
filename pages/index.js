@@ -2,7 +2,20 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-export default function Home() {
+const defaultEndpoint = `https://rickandmortyapi.com/api/character/`;
+
+export async function getServerSideProps() {
+  const res = await fetch(defaultEndpoint)
+  const data = await res.json();
+  return {
+    props: {
+      data
+    }
+  }
+}
+
+export default function Home({ data }) {
+  console.log('data', data);
   return (
     <div className={styles.container}>
       <Head>

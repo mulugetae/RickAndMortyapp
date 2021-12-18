@@ -1,6 +1,12 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
+import { useState, useEffect} from 'react';
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+
+
+
 
 const defaultEndpoint = `https://rickandmortyapi.com/api/character/`;
 
@@ -16,6 +22,61 @@ export async function getServerSideProps() {
 
 export default function Home({ data }) {
   console.log('data', data);
+  const { info, results: defaultResults = [] } = data;
+
+const [results, updateResults] = useState(defaultResults);
+
+const [page, updatePage] = useState({
+  ...info,
+  current: defaultEndpoint
+});
+const { current } = page;
+
+useEffect(() => {
+  if ( current === defaultEndpoint ) return;
+
+  async function request() {
+    const res = await fetch(current)
+    const nextData = await res.json();
+
+    updatePage({
+      current,
+      ...nextData.info
+    });
+
+    if ( !nextData.info?.prev ) {
+      updateResults(nextData.results);
+      return;
+    }
+
+    updateResults(prev => {
+      return [
+        ...prev,
+        ...nextData.results
+      ]
+    });
+  }
+
+  request();
+}, [current]);
+
+
+function handleOnSubmitSearch(e) {
+  e.preventDefault();
+
+  const { currentTarget = {} } = e;
+  const fields = Array.from(currentTarget?.elements);
+  const fieldQuery = fields.find(field => field.name === 'query');
+
+  const value = fieldQuery.value || '';
+  const endpoint = `https://rickandmortyapi.com/api/character/?name=${value}`;
+
+  updatePage({
+    current: endpoint
+  });
+}
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -25,44 +86,28 @@ export default function Home({ data }) {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <form className={styles.search} onSubmit={handleOnSubmitSearch}>
+  <input name="query" type="search" />
+  <button>Search</button>
+</form>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+<ul className={styles.grid}>
+  {results.map(result => {
+    const { id, name, image } = result;
+    return (
+      <li key={id} className={styles.card}>
+        <a href="#">
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+          <img src={image} />
+          <h3>{name}</h3>
+        </a>
+      </li>
+    )
+  })}
+</ul>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
       </main>
 
       <footer className={styles.footer}>

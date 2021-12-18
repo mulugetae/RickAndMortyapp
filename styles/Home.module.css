@@ -67,10 +67,10 @@
 
 .grid {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: center; 
   flex-wrap: wrap;
-  max-width: 800px;
+  
 }
 
 .card {
@@ -113,4 +113,7 @@
     width: 100%;
     flex-direction: column;
   }
+}
+.card img {
+  max-width: 250px;
 }

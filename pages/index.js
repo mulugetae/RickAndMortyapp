@@ -140,21 +140,64 @@ function handleOnSubmitSearch(e) {
         <main className={styles.main}>
 
 
-<ul className={styles.grid}>
+<ul className="grid">
   {results.map(result => {
-    const { id, name, image } = result;
+    const { id, name, image ,species ,status,origin,episode} = result;
     return (
-      <li key={id} className={styles.card}>
-        <a href="#">
-
-          <img src={image} />
-          <h3>{name}</h3>
-        </a>
+      
+      <li key={id} className="card">
+        <div className="img-avatar">
+        
+  </div>
+  <div className="card-text">
+    <div className="portada">
+    <img src={image} />
+    </div>
+    <div className="title-total">   
+      <div className="title"><h2>{name}</h2> 
+      <div className="container">
+      
+</div>
+      </div>
+            <div className="row">
+          <div className="column" >
+            <h3>Origin</h3>
+            <p>{origin.name}</p>
+          </div>
+          <div className="column" >
+            <h3>Species</h3>
+            <p>{species}</p>
+          </div>
+        </div>
+          <div className="actions">
+            <button><a href="#demo-modal">See Epsode</a></button>
+          </div>
+  </div>
+ 
+  </div>
+  
+ 
       </li>
+      
+      
     )
   })}
+   
 </ul>
+<div id="demo-modal" className="modal">
+    <div className="modal__content">
+        <h1></h1>
 
+        <p>
+        </p>
+
+        <div className="modal__footer">
+         <i className="fa fa-heart"></i>, 
+        </div>
+
+        <a href="#" className="modal__close">&times;</a>
+    </div>
+    </div>
 
       </main>
 

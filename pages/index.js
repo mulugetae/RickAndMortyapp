@@ -9,28 +9,36 @@ import styles from '../styles/Home.module.css'
 
 
 const defaultEndpoint = `https://rickandmortyapi.com/api/character/`;
+const nextEndpoint = `https://rickandmortyapi.com/api/episode/`
 
 export async function getServerSideProps() {
   const res = await fetch(defaultEndpoint)
+  const te = await fetch(nextEndpoint )
   const data = await res.json();
+  const dataep = await te.json();
   return {
     props: {
-      data
+      data,
+      dataep 
     }
   }
 }
 
-export default function Home({ data }) {
-  console.log('data', data);
+
+export default function Home({ data ,dataep }) {
+  console.log('data', dataep );
   const { info, results: defaultResults = [] } = data;
+  const { infos, resultst: defaultResultst = [] } = dataep ;
 
 const [results, updateResults] = useState(defaultResults);
+const [resultst, updateResultst] = useState(defaultResultst);
 
 const [page, updatePage] = useState({
-  ...info,
+  ...info,...infos,
   current: defaultEndpoint
 });
 const { current } = page;
+const { currentt } = page;
 
 useEffect(() => {
   if ( current === defaultEndpoint ) return;
@@ -38,14 +46,17 @@ useEffect(() => {
   async function request() {
     const res = await fetch(current)
     const nextData = await res.json();
+    const rest = await fetch(currentt)
+    const nextDatat = await rest.json();
 
     updatePage({
-      current,
-      ...nextData.info
+      current,currentt,
+      ...nextData.info , ...nextDatat.infos
     });
 
     if ( !nextData.info?.prev ) {
       updateResults(nextData.results);
+      updateResultst(nextDatat.resultst);
       return;
     }
 
@@ -55,10 +66,17 @@ useEffect(() => {
         ...nextData.results
       ]
     });
+    updateResultst(prev => {
+      return [
+        ...prev,
+        ...nextDatat.resultst
+      ]
+    });
   }
+  
 
   request();
-}, [current]);
+}, [current, currentt]);
 
 const [darkTheme, setDarkTheme] = useState(undefined);
 
@@ -142,7 +160,7 @@ function handleOnSubmitSearch(e) {
 
 <ul className="grid">
   {results.map(result => {
-    const { id, name, image ,species ,status,origin,episode} = result;
+    const { id, name, image ,species ,origin} = result;
     return (
       
       <li key={id} className="card">
@@ -154,10 +172,7 @@ function handleOnSubmitSearch(e) {
     <img src={image} />
     </div>
     <div className="title-total">   
-      <div className="title"><h2>{name}</h2> 
-      <div className="container">
-      
-</div>
+      <div className="title"><h2>{name}</h2>
       </div>
             <div className="row">
           <div className="column" >
@@ -168,9 +183,11 @@ function handleOnSubmitSearch(e) {
             <h3>Species</h3>
             <p>{species}</p>
           </div>
+        
         </div>
           <div className="actions">
             <button><a href="#demo-modal">See Epsode</a></button>
+            
           </div>
   </div>
  
@@ -185,15 +202,44 @@ function handleOnSubmitSearch(e) {
    
 </ul>
 <div id="demo-modal" className="modal">
-    <div className="modal__content">
-        <h1></h1>
+<div className="modal__content">
 
-        <p>
-        </p>
-
-        <div className="modal__footer">
-         <i className="fa fa-heart"></i>, 
+<ul className="grid">
+  {resultst.map(results => {
+    const { id, name,air_date,episode} = results;
+    return (
+      
+      <li key={id} className="card">
+  <div className="card-text">
+    {/* <div className="portada">
+    <img src={image} />
+    </div> */}
+    <div className="title-total">   
+      <div className="title"><h2>{name}</h2>
+      </div>
+            <div className="row">
+          <div className="column" >
+            <h3>{episode}</h3>
+            <p>episode</p>
+          </div>
+          <div className="column" >
+            <h2>{air_date}</h2>
+            <p>Air_date</p>
+          </div>
+        
         </div>
+  </div>
+ 
+  </div>
+  
+ 
+      </li>
+      
+      
+    )
+  })}
+   
+</ul>
 
         <a href="#" className="modal__close">&times;</a>
     </div>

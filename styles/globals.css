@@ -147,9 +147,7 @@ section .heroSection {
   font-size: 17px;
 }
 
-a {
-  color: var(--color-anchor);
-}
+
 .search {
       width: 100%;
       padding: 12px 24px;
@@ -215,7 +213,6 @@ a {
   display: flex;
   flex-direction: row;
   border-radius: 25px;
-  position: relative;
 }
 .card h2 {
   margin: 0;
@@ -226,8 +223,7 @@ a {
   font-size: 12px;
   font-weight: bold;
   font-size: 12px;
-  display: flex;
-  flex-direction: row;
+  align-content: right;
 }
  .desc {
   padding: 0.5rem 1rem;
@@ -235,9 +231,8 @@ a {
 }
  .actions {
   display: grid;
-  align-items: center;
   padding: 0.5rem 1rem;
-  padding-left: 10px;
+  padding-left: 150px;
 }
 .card svg {
   width: 85px;
@@ -256,19 +251,19 @@ a {
 
 .card-text {
   display: grid;
-  grid-template-columns: 1fr 2fr ;
+  grid-template-columns: 1fr 3fr ;
+  padding: 10px;
 }
 .title-total {
   position: relative;
 	overflow: hidden;
-	width: 100%;
 	font-size: 10px;
 
 }
 
-path {
-  fill: white;
-}
+/* path {
+
+} */
 
 .img-portada {
   width: 100%;
@@ -288,9 +283,14 @@ path {
   max-width: 100%;
 }
 button {
-  border: none;
-  align-items: right;
-  padding: 0 1rem;
+  box-sizing: border-box;
+  background-color: yellow;
+  border: 2px solid ;
+  cursor: pointer;
+  display: flex;
+  margin: 10px;
+  text-decoration: none;
+  text-align: center;
 }
 .grid  {
   max-width: 2000px;
@@ -306,12 +306,9 @@ button {
 
 /* Clear floats after the columns */
 .row {
-  content: "";
-  padding-left: 10px;
-  padding: 1rem;
+  padding-left: 30px;
   display: table;
   clear: both;
-  padding: 2rem;
 }
 
 /* Screen larger than 600px? 2 column */
@@ -336,7 +333,6 @@ h3{
   background-color: #fff;
   border-radius: 3px;
   text-transform: uppercase;
-  color: #585858;
   font-family: 'Roboto', sans-serif;
 }
 

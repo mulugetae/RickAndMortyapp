@@ -28,17 +28,15 @@ export async function getServerSideProps() {
 export default function Home({ data ,dataep }) {
   console.log('data', dataep );
   const { info, results: defaultResults = [] } = data;
-  const { infos, resultst: defaultResultst = [] } = dataep ;
 
 const [results, updateResults] = useState(defaultResults);
-const [resultst, updateResultst] = useState(defaultResultst);
 
 const [page, updatePage] = useState({
-  ...info,...infos,
+  ...info,
   current: defaultEndpoint
 });
 const { current } = page;
-const { currentt } = page;
+
 
 useEffect(() => {
   if ( current === defaultEndpoint ) return;
@@ -46,17 +44,14 @@ useEffect(() => {
   async function request() {
     const res = await fetch(current)
     const nextData = await res.json();
-    const rest = await fetch(currentt)
-    const nextDatat = await rest.json();
 
     updatePage({
-      current,currentt,
-      ...nextData.info , ...nextDatat.infos
+      current,
+      ...nextData.info 
     });
 
     if ( !nextData.info?.prev ) {
       updateResults(nextData.results);
-      updateResultst(nextDatat.resultst);
       return;
     }
 
@@ -66,17 +61,11 @@ useEffect(() => {
         ...nextData.results
       ]
     });
-    updateResultst(prev => {
-      return [
-        ...prev,
-        ...nextDatat.resultst
-      ]
-    });
   }
   
 
   request();
-}, [current, currentt]);
+}, [current]);
 
 const [darkTheme, setDarkTheme] = useState(undefined);
 
@@ -205,25 +194,22 @@ function handleOnSubmitSearch(e) {
 <div className="modal__content">
 
 <ul className="grid">
-  {resultst.map(results => {
+  {results.map(results => {
     const { id, name,air_date,episode} = results;
     return (
       
       <li key={id} className="card">
   <div className="card-text">
-    {/* <div className="portada">
-    <img src={image} />
-    </div> */}
     <div className="title-total">   
-      <div className="title"><h2>{name}</h2>
+      <div className="title"><h2>Pilot</h2>
       </div>
             <div className="row">
           <div className="column" >
-            <h3>{episode}</h3>
+            <h3>S01E01</h3>
             <p>episode</p>
           </div>
           <div className="column" >
-            <h2>{air_date}</h2>
+            <h3>December 2, 2013</h3>
             <p>Air_date</p>
           </div>
         
